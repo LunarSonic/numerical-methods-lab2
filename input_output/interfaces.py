@@ -5,8 +5,18 @@ from constants.settings import LOG_DECIMALS
 
 class BaseReader(ABC):
     @abstractmethod
-    def read_floats(self, text):
+    def read_line(self, text=None):
         pass
+
+    def read_floats(self, text=None):
+        line = self.read_line(text)
+        if not line:
+            return None
+        clean_line = line.replace(",", " ")
+        try:
+            return [float(x) for x in clean_line.split()]
+        except ValueError:
+            raise ValueError("Необходимо вводить только числа")
 
 class BaseWriter(ABC):
     @abstractmethod
